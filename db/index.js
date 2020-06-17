@@ -10,7 +10,7 @@ async function getAllLinks() {
     return rows;
 }
 
-async function createLink({name, comments}) {
+async function createLink({name, comments, tags = []}) {
     try {
         const {rows} = await client.query(`
             INSERT INTO links(name, comments)
@@ -24,8 +24,21 @@ async function createLink({name, comments}) {
     }
 }
 
+async function createTags(id , name){
+    try {
+        const {rows}= await client.query(`
+            SELECT * 
+            FROM tags;
+        `)
+        return rows;
+    } catch(error){
+        console.error('Didnt create tags', error)
+    }
+}
+
 module.exports = {
     client,
     getAllLinks,
     createLink,
+    createTags
 }

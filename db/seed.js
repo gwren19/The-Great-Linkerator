@@ -1,8 +1,9 @@
-const { client, getAllLinks, createLink } = require('./index');
+const { client, getAllLinks, createLink, createTags } = require('./index');
 
 async function dropTables() {
     try {
         await client.query(`
+            DROP TABLE IF EXISTS link_tags;
             DROP TABLE IF EXISTS tags;
             DROP TABLE IF EXISTS links;
         `);
@@ -22,6 +23,18 @@ async function createTables() {
             comments varchar(255) NOT NULL, 
             date DATE NOT NULL DEFAULT CURRENT_DATE
             );
+
+            CREATE TABLE tags (
+            id SERIAL PRIMARY KEY,
+            name varchar(255) UNIQUE NOT NULL  
+            );
+
+            CREATE TABLE link_tags (
+            "linksId" INTEGER REFERENCES links(id),
+            "tagsId" INTEGER REFERENCES tags(id),
+            UNIQUE ("linksId", "tagsId")
+
+            );
         `);
     } catch(error) {
         console.error(error);
@@ -31,12 +44,28 @@ async function createTables() {
 
 async function createInitialLink() {
     try {
-        const google = await createLink({name: 'www.google.com', comments: 'Best search engine'});
+        const google = await createLink({
+            name: 'www.google.com', 
+            comments: 'Best search engine',
+            });
         console.log(google)
     } catch(error) {
         console.error(error)
     }
 }
+
+async function createInitialTags(){
+    try {
+        const newTag = await createTags({
+            name: "search knowledge tool"
+        });
+        console.log(newTag)
+    } catch(error){
+        console.error(error)
+    }
+}
+
+
 
 async function rebuildDB() {
     try {
@@ -45,6 +74,7 @@ async function rebuildDB() {
         await dropTables();
         await createTables();
         await createInitialLink();
+        await createInitialTags();
         console.log('DB rebuilt!!!')
     } catch(error) {
         console.error(error)
