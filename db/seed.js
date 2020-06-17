@@ -1,4 +1,4 @@
-const { client, getAllLinks, getAllTags, createLink, createTags } = require('./index');
+const { client, getAllLinks, getLinksById, getAllTags, createLink, createTags, createLinkTag, getAllLinkTags } = require('./index');
 
 async function dropTables() {
     try {
@@ -45,9 +45,17 @@ async function createTables() {
 async function createInitialLink() {
     try {
         await createLink({
+            id:1,
             name: 'www.google.com', 
             comments: 'Best search engine',
         });
+
+        await createLink({
+            id:2,
+            name: 'www.espn.com', 
+            comments: 'Sports Website',
+        });
+
     } catch(error) {
         console.error(error)
     }
@@ -55,22 +63,43 @@ async function createInitialLink() {
 
 async function createInitialTags() {
     try {
+            
         await createTags({
-            name: "search",
+            name: ["knowledge","tool" ,"search"]
         });
 
         await createTags({
-            name: "knowledge",
+            name: ["Sports", "News", "Athletes"]
         });
 
-        await createTags({
-            name: "tool"
-        });
+        
     } catch(error){
         console.error(error)
     }
 }
 
+async function createInitialLinksTag(){
+    
+    const [{ id:linksId }]  = await getAllLinks()
+    const [{ id:tagsId }] = await getAllTags()
+
+    // const [{ linksId, tagsId }] = await getAllLinkTags();
+    
+    try {
+        await createLinkTag({
+            linksId,
+            tagsId
+        })
+
+        await createLinkTag({
+            linksId:2,
+            tagsId:2
+        })
+       
+    }catch (error){
+        console.error("Failed to create Links Tag", error)
+    }
+}
 
 
 async function rebuildDB() {
@@ -81,6 +110,7 @@ async function rebuildDB() {
         await createTables();
         await createInitialLink();
         await createInitialTags();
+        await createInitialLinksTag();
     } catch(error) {
         console.error(error)
     }
@@ -90,14 +120,22 @@ async function testDB() {
     try {
       console.log("Starting to test database...");
 
-      console.log("Calling getAllLinks");
+      console.log("Initial Links Created!:");
       const links = await getAllLinks();
       console.log("Result:", links);
 
-      console.log("Calling getAllTags");
+      console.log("Initial tags created!:");
       const tags = await getAllTags();
       console.log("Result:", tags);
-  
+      
+      console.log("Initial LinkTags created!:")
+      const linkTags = await getAllLinkTags();
+      console.log("Result:", linkTags)
+
+      console.log("Getting Links by Id")
+      const idLinks = await getLinksById();
+      console.log("Result:", idLinks)
+
       console.log("Finished database tests!");
     } catch (error) {
       console.error("Error testing database!");

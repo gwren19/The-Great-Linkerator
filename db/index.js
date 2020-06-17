@@ -7,6 +7,7 @@ async function getAllLinks() {
         SELECT * 
         FROM links;
     `);
+
     return rows;
 }
 
@@ -18,13 +19,21 @@ async function getAllTags() {
     return rows;
 }
 
-async function createLink({name, comments}) {
+async function getAllLinkTags(){
+    const { rows } = await client.query(`
+        SELECT *
+        FROM link_tags;
+        `);
+    return rows;
+}
+
+async function createLink({id, name, comments}) {
     try {
         const { rows } = await client.query(`
-            INSERT INTO links(name, comments)
-            VALUES ($1, $2)
+            INSERT INTO links(id, name, comments)
+            VALUES ($1, $2, $3)
             RETURNING *;
-        `, [name, comments]);
+        `, [id, name, comments]);
 
         return rows;
     } catch(error) {
@@ -45,10 +54,69 @@ async function createTags({name}){
     }
 }
 
+async function createLinkTag({linksId, tagsId}) {
+    try{
+       const {rows} = await client.query(`
+            INSERT INTO link_tags( "linksId", "tagsId" )
+            VALUES ($1, $2)
+            ON CONFLICT ("linksId", "tagsId") DO NOTHING;
+            
+            `, [linksId, tagsId])
+       
+        return rows;
+    } catch (error) {
+        console.error("Failed to create Link Tag", error)
+    }
+}
+
+async function getLinksById(linkId) {
+    
+    try {
+         const { rows: [links] } = await client.query(`
+         SELECT *
+         FROM links
+         WHERE id= $1;         
+         `, [linkId]);
+ 
+         const { rows: tags } = await client.query(`
+         SELECT tags.*
+         FROM tags
+         JOIN link_tags ON tags.id=link_tags."tagsId"
+         WHERE link_tags."linksId"= $1;
+         `, [linkId])
+         console.log("<<<<<<<",tags)
+        //  links.tags = tags;
+ 
+     return links;
+ 
+     
+ }   catch(error){
+     console.error("Failed to get links by Id", error)
+ }}
+
+async function addTagsToLinks(linksId, tagList){
+    try{
+        const createLinksTagPromises = tagList.map(
+            tag => createLinkTag(linksId, tags.Id)
+        );
+        
+        await Promise.all(createLinksTagPromises);
+
+        return await getLinksById(linksId);
+    } catch(error){
+        console.error("Error adding Tags to Links")
+    }
+}
+
+
 module.exports = {
     client,
     getAllLinks,
     getAllTags,
+    getAllLinkTags,
     createLink,
-    createTags
+    createTags,
+    createLinkTag,
+    getLinksById,
+    addTagsToLinks
 }
