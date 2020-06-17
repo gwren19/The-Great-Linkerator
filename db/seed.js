@@ -1,4 +1,4 @@
-const { client, getAllLinks, createLink, createTags } = require('./index');
+const { client, getAllLinks, getAllTags, createLink, createTags } = require('./index');
 
 async function dropTables() {
     try {
@@ -44,22 +44,28 @@ async function createTables() {
 
 async function createInitialLink() {
     try {
-        const google = await createLink({
+        await createLink({
             name: 'www.google.com', 
             comments: 'Best search engine',
-            });
-        console.log(google)
+        });
     } catch(error) {
         console.error(error)
     }
 }
 
-async function createInitialTags(){
+async function createInitialTags() {
     try {
-        const newTag = await createTags({
-            name: "search knowledge tool"
+        await createTags({
+            name: "search",
         });
-        console.log(newTag)
+
+        await createTags({
+            name: "knowledge",
+        });
+
+        await createTags({
+            name: "tool"
+        });
     } catch(error){
         console.error(error)
     }
@@ -75,27 +81,32 @@ async function rebuildDB() {
         await createTables();
         await createInitialLink();
         await createInitialTags();
-        console.log('DB rebuilt!!!')
     } catch(error) {
         console.error(error)
-    } finally {
-        client.end();
     }
 }
 
-// async function testDB() {
-//     try {
-//       console.log("Starting to test database...");
+async function testDB() {
+    try {
+      console.log("Starting to test database...");
+
+      console.log("Calling getAllLinks");
+      const links = await getAllLinks();
+      console.log("Result:", links);
+
+      console.log("Calling getAllTags");
+      const tags = await getAllTags();
+      console.log("Result:", tags);
   
-//       const links = getAllLinks()
-      
-  
-//       console.log("Finished database tests!");
-//     } catch (error) {
-//       console.error("Error testing database!");
-//       throw error;
-//     }
-// }
+      console.log("Finished database tests!");
+    } catch (error) {
+      console.error("Error testing database!");
+      throw error;
+    }
+}
   
 
 rebuildDB()
+    .then(testDB)
+    .catch(console.error)
+    .finally(() => client.end())
