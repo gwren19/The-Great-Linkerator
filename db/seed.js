@@ -133,7 +133,7 @@ async function testDB() {
       console.log("Result:", linkTags)
 
       console.log("Getting Links by Id")
-      const idLinks = await getLinksById();
+      const idLinks = await getLinksById(1);
       console.log("Result:", idLinks)
 
       console.log("Finished database tests!");

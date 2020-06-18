@@ -84,8 +84,8 @@ async function getLinksById(linkId) {
          JOIN link_tags ON tags.id=link_tags."tagsId"
          WHERE link_tags."linksId"= $1;
          `, [linkId])
-         console.log("<<<<<<<",tags)
-        //  links.tags = tags;
+         
+         links.tags = tags;
  
      return links;
  
