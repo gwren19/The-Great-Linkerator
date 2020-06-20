@@ -108,7 +108,6 @@ async function addTagsToLinks(linksId, tagList){
     }
 }
 
-
 module.exports = {
     client,
     getAllLinks,

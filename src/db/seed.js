@@ -1,4 +1,4 @@
-const { client, getAllLinks, getLinksById, getAllTags, createLink, createTags, createLinkTag, getAllLinkTags } = require('./index');
+const { client, getAllLinks, getLinksById, getAllTags, createLink, createTags, createLinkTag, getAllLinkTags } = require('./index.js');
 
 async function dropTables() {
     try {

@@ -1,18 +1,45 @@
 {
-  "name": "The_Great_Linkerator",
+  "name": "The-Great-Linkerator",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "seed:dev": "nodemon ./db/seed.js"
+    "seed:dev": "nodemon ./src/db/seed.js",
+    "start:dev": "react-scripts start",
+    "start:server": "node ./src/api/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pg": "^8.2.1"
+    "chalk": "^4.1.0",
+    "express": "^4.17.1",
+    "pg": "^8.2.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
-  }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gwren19/The-Great-Linkerator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gwren19/The-Great-Linkerator/issues"
+  },
+  "homepage": "https://github.com/gwren19/The-Great-Linkerator#readme",
+  "description": ""
 }
