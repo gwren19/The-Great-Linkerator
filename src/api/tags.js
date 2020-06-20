@@ -1,11 +1,15 @@
 const express = require('express');
 const tagsRouter = express.Router();
+const { getAllTags } = require('../db')
 
-linksRouter.use((req, res, next) => {
-    console.log('A request in being made to /links')
+tagsRouter.use((req, res, next) => {
+    console.log('A request in being made to /tags')
     next()
 });
 
-linksRouter.get('/', (req, res, next))
+tagsRouter.get('/', async (req, res, next) => {
+    const tags = await(getAllTags());
+    res.send({ tags })
+});
 
-module.exports = linksRouter;
+module.exports = tagsRouter;
