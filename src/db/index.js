@@ -27,15 +27,15 @@ async function getAllLinkTags(){
     return rows;
 }
 
-async function createLink({id, name, comments}) {
+async function createLink({name, comments}) {
     try {
         const { rows } = await client.query(`
-            INSERT INTO links(id, name, comments)
-            VALUES ($1, $2, $3)
+            INSERT INTO links(name, comments)
+            VALUES ($1, $2)
             RETURNING *;
-        `, [id, name, comments]);
+        `, [name, comments]);
 
-        return rows;
+        return rows[0];
     } catch(error) {
         console.error(error)
     }
@@ -88,11 +88,11 @@ async function getLinksById(linkId) {
          links.tags = tags;
  
      return links;
- 
-     
+
  }   catch(error){
      console.error("Failed to get links by Id", error)
- }}
+}
+}
 
 async function addTagsToLinks(linksId, tagList){
     try{
@@ -117,5 +117,5 @@ module.exports = {
     createTags,
     createLinkTag,
     getLinksById,
-    addTagsToLinks
+    addTagsToLinks,
 }

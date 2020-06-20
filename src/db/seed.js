@@ -65,13 +65,16 @@ async function createInitialTags() {
     try {
             
         await createTags({
-            name: ["knowledge","tool" ,"search"]
+            name: "knowledge"
         });
 
         await createTags({
-            name: ["Sports", "News", "Athletes"]
+            name: "Sports"
         });
 
+        await createTags({
+            name: "News"
+        });
         
     } catch(error){
         console.error(error)
@@ -92,8 +95,8 @@ async function createInitialLinksTag(){
         })
 
         await createLinkTag({
-            linksId:2,
-            tagsId:2
+            linksId:1,
+            tagsId:3
         })
        
     }catch (error){
