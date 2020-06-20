@@ -1,17 +1,19 @@
-const PORT = 3000;
 const express = require('express');
-const server = express();
+const server = express.Router();
 const chalk = require('chalk');
 
+const linksRouter = require('./links');
+server.use('/links', linksRouter);
 
-server.listen(PORT, () => {
-    console.log (chalk.green("Server is up on port 3000"))
-})
+// const tagsRouter = require('./tags');
+// server.use('/tags', tagsRouter);
 
-server.get('/src/api/links', () => {});
+// server.get('/src/api/links', () => {});
 
-server.get('/src/api/tags/:tagName/links', () => {});
+// server.get('/src/api/tags/:tagName/links', () => {});
 
-server.post('/src/api/links', () => {});
+// server.post('/src/api/links', () => {});
 
-server.patch('/src/api/links/:id', ()=>{});
+// server.patch('/src/api/links/:id', ()=>{});
+
+module.exports = server;
