@@ -46,6 +46,7 @@ async function createTags({name}){
         const { rows } = await client.query(`
             INSERT INTO tags(name)
             VALUES ($1)
+            ON CONFLICT(name) DO NOTHING
             RETURNING *;
         `, [name]);
         return rows;

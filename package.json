@@ -5,7 +5,7 @@
   "scripts": {
     "seed:dev": "nodemon ./src/db/seed.js",
     "start:dev": "react-scripts start",
-    "start:server": "node ./src/api_index.js",
+    "start:server": "nodemon ./src/api_index.js",
     "build": "react-scripts build"
   },
   "keywords": [],
