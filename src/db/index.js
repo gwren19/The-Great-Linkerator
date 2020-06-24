@@ -34,34 +34,33 @@ async function createLink({name, comments}) {
             VALUES ($1, $2)
             RETURNING *;
         `, [name, comments]);
-
+        
         return rows[0];
     } catch(error) {
         console.error(error)
     }
 }
 
-async function createTags({name}){
+async function createTag(name){
     try {
-        const { rows } = await client.query(`
+        const { rows: tag } = await client.query(`
             INSERT INTO tags(name)
             VALUES ($1)
             ON CONFLICT(name) DO NOTHING
             RETURNING *;
         `, [name]);
-        return rows;
+        return tag;
     } catch(error){
         console.error('Didnt create tags', error)
     }
 }
 
-async function createLinkTag({linksId, tagsId}) {
+async function createLinkTag(linksId, tagsId) {
     try{
        const {rows} = await client.query(`
             INSERT INTO link_tags( "linksId", "tagsId" )
             VALUES ($1, $2)
             ON CONFLICT ("linksId", "tagsId") DO NOTHING;
-            
             `, [linksId, tagsId])
        
         return rows;
@@ -115,7 +114,7 @@ module.exports = {
     getAllTags,
     getAllLinkTags,
     createLink,
-    createTags,
+    createTag,
     createLinkTag,
     getLinksById,
     addTagsToLinks,

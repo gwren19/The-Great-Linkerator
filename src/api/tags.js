@@ -1,6 +1,6 @@
 const express = require('express');
 const tagsRouter = express.Router();
-const { getAllTags, createTags } = require('../db')
+const { getAllTags, createTag } = require('../db')
 
 tagsRouter.use((req, res, next) => {
     console.log('A request in being made to /tags')
@@ -17,7 +17,7 @@ tagsRouter.post('/', async (req, res, next ) => {
     console.log('A post is being made to /tags')
     const { name } = req.body
     const tagData = { name }
-    const newTag = await createTags(tagData);
+    const newTag = await createTag(tagData);
     res.send({ newTag })
 })
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const linksRouter = express.Router();
-const { getAllLinks, createLink, createTags, createLinkTag } = require('../db');
+const { getAllLinks, createLink, createTag, createLinkTag } = require('../db');
 
 linksRouter.use((req, res, next) => {
     console.log('A request in being made to /links')
@@ -20,9 +20,17 @@ linksRouter.post('/', async (req, res, next) => {
         const tagData = { name };
 
         const newLink = await createLink(linkData);
-        const newTag = await createTags(tagData);
-        const newLinkTag = await createLinkTag()
+        const newTags = await Promise.all(tagArr.map(tag => {
+            console.log()
+            return createTag(tag)
+        }))
+        console.log('newTags:', newTags)
 
+        await Promise.all(newTags.map(newTag => {
+            console.log('links:', newLink, 'tags:', newTag)
+            return createLinkTag(newLink.id, newTag.id)
+        }))
+        newLink.tags = newTags;
       
         if (newLink) {
             res.send({ newLink })
@@ -33,16 +41,10 @@ linksRouter.post('/', async (req, res, next) => {
             });
         }
 
-        if (tagArr.length) {
-            // create tags on conflict do nothing
-            
-            // const { name } = req.body
-            // const tagData = { name }
-            // const newTag = await createTags(tagData);
-            res.send({ newTag })
-            // create link_tags
-            tagData.tags = tagArr;
-        }
+        // if (tagArr.length) {
+        //     res.send({ newTag })
+        //     tagData.tags = tagArr;
+        // }
 
 
     } catch (error) {
