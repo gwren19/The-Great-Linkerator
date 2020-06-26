@@ -17,11 +17,9 @@ linksRouter.post('/', async (req, res, next) => {
         const { name, comments, tags = "" } = req.body;
         const tagArr = tags.trim().split(/\s+/);
         const linkData = { name, comments };
-        const tagData = { name };
 
         const newLink = await createLink(linkData);
         const newTags = await Promise.all(tagArr.map(tag => {
-            console.log()
             return createTag(tag)
         }))
         console.log('newTags:', newTags)
@@ -33,7 +31,7 @@ linksRouter.post('/', async (req, res, next) => {
         newLink.tags = newTags;
       
         if (newLink) {
-            res.send({ newLink })
+            res.send( newLink )
         } else {
             next({
                 name: 'LinkError',

@@ -1,4 +1,4 @@
-const { client, getAllLinks, getLinksById, getAllTags, createLink, createTags, createLinkTag, getAllLinkTags } = require('./index.js');
+const { client, getAllLinks, getLinksById, getAllTags, createLink, createTag, createLinkTag, getAllLinkTags } = require('./index.js');
 
 async function dropTables() {
     try {
@@ -64,17 +64,17 @@ async function createInitialLink() {
 async function createInitialTags() {
     try {
             
-        await createTags({
-            name: "knowledge"
-        });
+        await createTag(
+            "knowledge"
+        );
 
-        await createTags({
-            name: "Sports"
-        });
+        await createTag(
+            "Sports"
+        );
 
-        await createTags({
-            name: "News"
-        });
+        await createTag(
+        "News"
+        );
         
     } catch(error){
         console.error(error)
@@ -83,27 +83,25 @@ async function createInitialTags() {
 
 async function createInitialLinksTag(){
     
-    const [{ id:linksId }]  = await getAllLinks()
-    const [{ id:tagsId }] = await getAllTags()
+    // const [{ id:linksId }]  = await getAllLinks()
+    // const [{ id:tagsId }] = await getAllTags()
 
     // const [{ linksId, tagsId }] = await getAllLinkTags();
     
     try {
-        await createLinkTag({
-            linksId,
-            tagsId
-        })
+        const newLinkTag = await createLinkTag(1, 2);
+        console.log('newLinkTag:', newLinkTag)
 
-        await createLinkTag({
-            linksId:1,
-            tagsId:3
-        })
+
+        // await createLinkTag({
+        //     linksId:1,
+        //     tagsId:3
+        // })
        
     }catch (error){
         console.error("Failed to create Links Tag", error)
     }
 }
-
 
 async function rebuildDB() {
     try {
@@ -129,14 +127,14 @@ async function testDB() {
 
       console.log("Initial tags created!:");
       const tags = await getAllTags();
-      console.log("Result:", tags);
+      console.log("GetAllTags Result:", tags);
       
       console.log("Initial LinkTags created!:")
       const linkTags = await getAllLinkTags();
       console.log("Result:", linkTags)
 
       console.log("Getting Links by Id")
-      const idLinks = await getLinksById(1);
+      const idLinks = await getLinksById(2);
       console.log("Result:", idLinks)
 
       console.log("Finished database tests!");

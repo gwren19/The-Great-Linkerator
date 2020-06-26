@@ -3,12 +3,21 @@ const { Client } = require('pg');
 const client = new Client('postgres://localhost:5432/linkerator');
 
 async function getAllLinks() {
-    const { rows } = await client.query(`
-        SELECT * 
-        FROM links;
-    `);
-
-    return rows;
+    try {
+        const { rows: [links] } = await client.query(`
+        SELECT *
+        FROM links        
+        `);
+        const { rows: tags } = await client.query(`
+        SELECT tags.*
+        FROM tags
+        JOIN link_tags ON tags.id=link_tags."tagsId"
+        `)
+        links.tags = tags;
+        return links;
+    } catch (error) {
+        throw error;
+    }
 }
 
 async function getAllTags() {
@@ -43,7 +52,7 @@ async function createLink({name, comments}) {
 
 async function createTag(name){
     try {
-        const { rows: tag } = await client.query(`
+        const { rows: [tag] } = await client.query(`
             INSERT INTO tags(name)
             VALUES ($1)
             ON CONFLICT(name) DO NOTHING
