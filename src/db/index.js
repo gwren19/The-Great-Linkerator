@@ -4,16 +4,15 @@ const client = new Client('postgres://localhost:5432/linkerator');
 
 async function getAllLinks() {
     try {
-        const { rows: [links] } = await client.query(`
-        SELECT *
-        FROM links        
+        const { rows: linkId } = await client.query(
+            `SELECT id, name, comments, date 
+            FROM links;
         `);
-        const { rows: tags } = await client.query(`
-        SELECT tags.*
-        FROM tags
-        JOIN link_tags ON tags.id=link_tags."tagsId"
-        `)
-        links.tags = tags;
+
+        const links = await Promise.all(linkId.map(
+            link => getLinksById(link.id)
+        ));
+        
         return links;
     } catch (error) {
         throw error;
@@ -103,6 +102,25 @@ async function getLinksById(linkId) {
 }
 }
 
+async function getTagsById(tagId) {
+    try {
+        const { rows: [tag]} = await client.query(`
+            SELECT *
+            FROM tags
+            WHERE id=$1;
+            `, [tagId]);
+            if(!tag) {
+                throw {
+                    name: 'TagNotFoundError',
+                    description: 'Could not find activity with that tagId'
+                }
+            };
+            return tag;
+    } catch(error) {
+        throw error;
+    }
+};
+
 async function addTagsToLinks(linksId, tagList){
     try{
         const createLinksTagPromises = tagList.map(
@@ -117,6 +135,74 @@ async function addTagsToLinks(linksId, tagList){
     }
 }
 
+async function updateLink(id, fields = {}) {
+    const setString = Object.keys(fields).map(
+        (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+
+    if(setString.length === 0) {
+        return;
+    }
+
+    try {
+      const {rows: [link] } = await client.query(`
+        UPDATE links
+        SET ${setString}
+        WHERE id=${id}
+        RETURNING *;
+        `, Object.values(fields));
+
+        return link;
+    } catch (error) {
+      throw error;
+    }
+};
+
+async function updateTag(id, fields = {}) {
+    const setString = Object.keys(fields).map(
+        (key, index) => `"${key}"=$${ index + 1 }`
+    ).join(', ');
+
+    if(setString.length === 0) {
+        return;
+    }
+
+    try {
+        const { rows: [tag] } = await client.query(`
+            UPDATE tags
+            SET ${setString}
+            WHERE id=${id}
+            RETURNING *;
+        `, Object.values(fields));
+
+        return tag;
+    } catch(error) {
+        throw error;
+    }
+};
+
+async function updateLinkTag( id, fields = {}) {
+    const setString = Object.keys(fields).map(
+      (key, index) => `${ key }=$${ index +1 }`
+    ).join(', ');
+
+    if(setString.length === 0) {
+      return;
+    }
+
+    try {
+      const{rows: [routine_activity]} = await client.query(`
+      UPDATE routine_activities
+      SET ${setString}
+      WHERE "routineId"=${id}
+      RETURNING *;
+      `, Object.values(fields));
+      return routine_activity;
+    } catch (error) {
+      throw error;
+    }
+};
+
 module.exports = {
     client,
     getAllLinks,
@@ -127,4 +213,7 @@ module.exports = {
     createLinkTag,
     getLinksById,
     addTagsToLinks,
+    updateLink,
+    updateTag,
+    getTagsById
 }

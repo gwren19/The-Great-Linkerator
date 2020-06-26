@@ -1,6 +1,6 @@
 const express = require('express');
 const linksRouter = express.Router();
-const { getAllLinks, createLink, createTag, createLinkTag } = require('../db');
+const { getAllLinks, createLink, createTag, createLinkTag, getLinksById, updateLink } = require('../db');
 
 linksRouter.use((req, res, next) => {
     console.log('A request in being made to /links')
@@ -38,15 +38,38 @@ linksRouter.post('/', async (req, res, next) => {
                 message: `You need to enter a link to post!`
             });
         }
-
-        // if (tagArr.length) {
-        //     res.send({ newTag })
-        //     tagData.tags = tagArr;
-        // }
-
-
     } catch (error) {
         throw error
+    }
+});
+
+linksRouter.patch('/:linkId', async (req, res, next) => {
+    const { linkId } = req.params;
+    const { name, comments } = req.body;
+    const updateFields = {};
+
+    if(name) {
+      updateFields.name = name;
+    };
+
+    if(comments) {
+      updateFields.comments = comments;
+    };
+
+    try {
+      const originalLink = await getLinksById(linkId);
+
+      if(originalLink) {
+        const updatedLink = await updateLink(linkId, updateFields);
+        res.send({link: updatedLink});
+      } else {
+        next({
+          name: 'Error', 
+          description: 'Cannot update link'
+        })
+      }
+    } catch({name, message}) {
+      next({name, message})
     }
 });
 
