@@ -16,12 +16,10 @@ const Counter = () => {
     );
 }
 
-const LinkList = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+const LinkList = ({results}) => {
+  console.log('results:', results)
+  return (
+  <h1>{results}</h1>)
 }
 
 export default LinkList;

@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
-import {
-    fetchCards,
-} from '../api/fakeData';
-
+import Link from './Link';
 
 const fetchLinks = async () => {
     try {
@@ -15,12 +11,12 @@ const fetchLinks = async () => {
         throw error;
     }
 }
-  
+
 const SearchBar = ({ setResults }) => {
-    async function handleSubmit(event) {
-      event.preventDefault();
-      const link = await fetchLinks();
-      setResults(link);
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const links = await fetchLinks();
+    setResults(links.links);
     }
   
     return (
