@@ -124,7 +124,7 @@ async function getTagsById(tagId) {
 async function addTagsToLinks(linksId, tagList){
     try{
         const createLinksTagPromises = tagList.map(
-            tag => createLinkTag(linksId, tags.Id)
+            tag => createLinkTag(linksId, tag.Id)
         );
         
         await Promise.all(createLinksTagPromises);
@@ -181,27 +181,27 @@ async function updateTag(id, fields = {}) {
     }
 };
 
-async function updateLinkTag( id, fields = {}) {
-    const setString = Object.keys(fields).map(
-      (key, index) => `${ key }=$${ index +1 }`
-    ).join(', ');
+// async function updateLinkTag( id, fields = {}) {
+//     const setString = Object.keys(fields).map(
+//       (key, index) => `${ key }=$${ index +1 }`
+//     ).join(', ');
 
-    if(setString.length === 0) {
-      return;
-    }
+//     if(setString.length === 0) {
+//       return;
+//     }
 
-    try {
-      const{rows: [routine_activity]} = await client.query(`
-      UPDATE routine_activities
-      SET ${setString}
-      WHERE "routineId"=${id}
-      RETURNING *;
-      `, Object.values(fields));
-      return routine_activity;
-    } catch (error) {
-      throw error;
-    }
-};
+//     try {
+//       const{rows: [routine_activity]} = await client.query(`
+//       UPDATE routine_activities
+//       SET ${setString}
+//       WHERE "routineId"=${id}
+//       RETURNING *;
+//       `, Object.values(fields));
+//       return routine_activity;
+//     } catch (error) {
+//       throw error;
+//     }
+// };
 
 module.exports = {
     client,
