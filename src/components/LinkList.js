@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const Counter = ({ link }) => {
+const Counter = () => {
     const [ count, setCount ] = useState(0);
   
     function handleClick() {
@@ -10,15 +11,16 @@ const Counter = ({ link }) => {
     return (
       <div>
         <h3>This link has been clicked { count } time(s).</h3>
-        <button onClick={ handleClick }>Do { link } another time.</button>
+        <a href="#" onClick={ handleClick }>Click Me</a>
       </div>
     );
 }
 
-const LinkList = (props) => {
+const LinkList = () => {
     return (
-        <>
-        </>
+        <div>
+            
+        </div>
     );
 }
 

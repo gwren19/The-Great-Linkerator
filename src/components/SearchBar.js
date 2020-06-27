@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 import {
     fetchCards,
-  } from '../api';
+} from '../api/fakeData';
+
+
+const fetchLinks = async () => {
+    try {
+        const { data } = await axios.get('http://localhost:3000/api/links')
+        console.log(data);
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
   
 const SearchBar = ({ setResults }) => {
     async function handleSubmit(event) {
       event.preventDefault();
-      const cards = await fetchCards();
-      setResults(cards);
+      const link = await fetchLinks();
+      setResults(link);
     }
   
     return (
