@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Link from './Link';
 
+import './SearchBar.css'
+
 const fetchLinks = async () => {
     try {
         const { data } = await axios.get('http://localhost:3000/api/links')
@@ -21,8 +23,8 @@ const SearchBar = ({ setResults }) => {
   
     return (
       <div id="search">
-        <h3>Look up websites here...</h3>
-        <form onSubmit={ handleSubmit }>
+        <h2 class = "searchTitle">Look up websites here...</h2>
+        <form class ="searchBar" onSubmit={ handleSubmit }>
           <input type="text" placeholder="link search" />
           <button type="submit">Search</button>
         </form>

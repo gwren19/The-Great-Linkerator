@@ -1,0 +1,11 @@
+.searchBar{
+    display:grid;
+    width:90%;
+    align-self: center;
+    justify-self: center;
+    
+}
+
+.searchTitle{
+    text-align: center;
+}

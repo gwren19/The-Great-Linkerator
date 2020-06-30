@@ -28,7 +28,7 @@ const LinkList = ({results}) => {
   //   })}
   // </div>)
     return (
-      <h1>Hello</h1>
+      <h1 class="linkList">LinkList</h1>
     )
 }
 
