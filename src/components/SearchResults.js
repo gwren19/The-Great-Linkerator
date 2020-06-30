@@ -8,6 +8,7 @@ const SearchResults = ({ results }) => {
             <h3> Here's what we found ({ results.length } results): </h3>
             <div>
                 {results.map(result => {
+                    console.log('single result:', result)
                     return (
                     <Link key={ result.id } { ...result } />)
                 })}

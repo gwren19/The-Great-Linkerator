@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Link from './Link';
 
 const Counter = () => {
     const [ count, setCount ] = useState(0);
@@ -17,9 +18,18 @@ const Counter = () => {
 }
 
 const LinkList = ({results}) => {
-  console.log('results:', results)
-  return (
-  <h1>{results}</h1>)
+  // console.log('results:', results)
+  // return (
+  // <div>
+  //   {results.map(result => {
+  //     return (
+  //       <Link key={ result.id } {...result} />
+  //     )
+  //   })}
+  // </div>)
+    return (
+      <h1>Hello</h1>
+    )
 }
 
 export default LinkList;

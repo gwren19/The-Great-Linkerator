@@ -46,13 +46,13 @@ async function createInitialLink() {
     try {
         await createLink({
             id:1,
-            name: 'www.google.com', 
+            name: 'https://google.com', 
             comments: 'Best search engine',
         });
 
         await createLink({
             id:2,
-            name: 'www.espn.com', 
+            name: 'https://espn.com', 
             comments: 'Sports Website',
         });
 

@@ -5,9 +5,10 @@ const Link = ({
   comments,
   click_count,
 }) => {
+  console.log(name)
   return (
     <div className="Link">
-      Website: { name } <br />
+      Website: <a href={name} target="_blank" rel="noopener noreferrer nofollow">{name}</a> <br />
       Comments: { comments } <br />
       {/* Amount of times clicked: { click_count } <br /> */}
     </div>
