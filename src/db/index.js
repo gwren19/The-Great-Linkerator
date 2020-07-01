@@ -194,24 +194,38 @@ async function updateTag(id, fields = {}) {
     }
 };
 
-async function updateClickCount(click_count, fields = {}) {
-    const setString = Object.keys(fields).map(
-        (key, index) => `"${key}"=$${ index + 1 }`
-    ).join(', ');
+// async function updateClickCount(click_count, fields = {}) {
+//     const setString = Object.keys(fields).map(
+//         (key, index) => `"${key}"=$${ index + 1 }`
+//     ).join(', ');
 
-    if(setString.length === 0) {
-        return;
-    }
+//     if(setString.length === 0) {
+//         return;
+//     }
 
+//     try {
+//         const { rows: [link] } = await client.query(`
+//             UPDATE links
+//             SET ${setString}
+//             WHERE click_count=${click_count}
+//             RETURNING *;
+//         `, Object.values(fields));
+
+//         return link;
+//     } catch(error) {
+//         throw error;
+//     }
+// }
+
+async function updateClickCount(id, clickCount) {//don't know how to use this in Link.js
     try {
-        const { rows: [link] } = await client.query(`
+        const {rows} = await client.query(`
             UPDATE links
-            SET ${setString}
-            WHERE click_count=${click_count}
-            RETURNING *;
-        `, Object.values(fields));
+            SET click_count = ${clickCount + 1}
+            WHERE id=${id};
+            `)
 
-        return link;
+        return rows;
     } catch(error) {
         throw error;
     }
