@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "seed:dev": "nodemon ./src/db/seed.js",
-    "seed": "node ./db/seed.js",
+    "seed": "node ./src/db/seed.js",
     "start": "node ./src/api_index.js",
     "start:dev": "react-scripts start",
     "start:server": "nodemon ./src/api_index.js",
