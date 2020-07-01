@@ -82,22 +82,9 @@ async function createInitialTags() {
 }
 
 async function createInitialLinksTag(){
-    
-    // const [{ id:linksId }]  = await getAllLinks()
-    // const [{ id:tagsId }] = await getAllTags()
-
-    // const [{ linksId, tagsId }] = await getAllLinkTags();
-    
     try {
         const newLinkTag = await createLinkTag(1, 2);
         console.log('newLinkTag:', newLinkTag)
-
-
-        // await createLinkTag({
-        //     linksId:1,
-        //     tagsId:3
-        // })
-       
     }catch (error){
         console.error("Failed to create Links Tag", error)
     }

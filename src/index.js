@@ -1,36 +1,25 @@
-import React, { useState } from 'react';//This enables JSX
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
-
- 
-
-import { SearchBar, SearchResults, LinkList, Form } from './components';
-  
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { SearchBar, SearchResults, Header } from './components';
 
 const App = () => {
     const [ results, setResults ] = useState([]);
 
     return (
-      <div id="app">
-        <h1 class="title"> Welcome to the Linkerator!</h1>
-        
-        <div id="content">
-        
+      <>      
         <SearchBar setResults = { setResults } />
         <SearchResults results = { results } />
-        ?
-       
-        <Form />
-
-        </div>
-        
-        <LinkList />
-      </div>
-
+      </>
     );
 }
+
+ReactDOM.render(
+  <Header />,
+  document.getElementById('header')
+);
   
 ReactDOM.render(
     <App />,
-    document.getElementById('site')
+    document.getElementById('app')
 );

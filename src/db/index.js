@@ -78,28 +78,42 @@ async function createLinkTag(linksId, tagsId) {
 }
 
 async function getLinksById(linkId) {
+    try {
+            const { rows: [links] } = await client.query(`
+            SELECT *
+            FROM links
+            WHERE id= $1;         
+            `, [linkId]);
+    
+            const { rows: tags } = await client.query(`
+            SELECT tags.*
+            FROM tags
+            JOIN link_tags ON tags.id=link_tags."tagsId"
+            WHERE link_tags."linksId"= $1;
+            `, [linkId])
+            
+            links.tags = tags;
+    
+            return links;
+
+    }   catch(error){
+     console.error("Failed to get links by Id", error)
+    }
+}
+
+async function getClickCount(linkId) {
     
     try {
-         const { rows: [links] } = await client.query(`
-         SELECT *
-         FROM links
-         WHERE id= $1;         
-         `, [linkId]);
+    const { rows: [links] } = await client.query(`
+    SELECT click_count
+    FROM links
+    WHERE id= $1;         
+    `, [linkId]);
  
-         const { rows: tags } = await client.query(`
-         SELECT tags.*
-         FROM tags
-         JOIN link_tags ON tags.id=link_tags."tagsId"
-         WHERE link_tags."linksId"= $1;
-         `, [linkId])
-         
-         links.tags = tags;
- 
-     return links;
-
- }   catch(error){
-     console.error("Failed to get links by Id", error)
-}
+    return links;
+    }  catch(error){
+        console.error("Failed to get click count by Id", error);
+    }
 }
 
 async function getTagsById(tagId) {
@@ -181,27 +195,28 @@ async function updateTag(id, fields = {}) {
     }
 };
 
-// async function updateLinkTag( id, fields = {}) {
-//     const setString = Object.keys(fields).map(
-//       (key, index) => `${ key }=$${ index +1 }`
-//     ).join(', ');
+async function updateClickCount(click_count, fields = {}) {
+    const setString = Object.keys(fields).map(
+        (key, index) => `"${key}"=$${ index + 1 }`
+    ).join(', ');
 
-//     if(setString.length === 0) {
-//       return;
-//     }
+    if(setString.length === 0) {
+        return;
+    }
 
-//     try {
-//       const{rows: [routine_activity]} = await client.query(`
-//       UPDATE routine_activities
-//       SET ${setString}
-//       WHERE "routineId"=${id}
-//       RETURNING *;
-//       `, Object.values(fields));
-//       return routine_activity;
-//     } catch (error) {
-//       throw error;
-//     }
-// };
+    try {
+        const { rows: [link] } = await client.query(`
+            UPDATE links
+            SET ${setString}
+            WHERE click_count=${click_count}
+            RETURNING *;
+        `, Object.values(fields));
+
+        return link;
+    } catch(error) {
+        throw error;
+    }
+}
 
 module.exports = {
     client,
@@ -215,5 +230,7 @@ module.exports = {
     addTagsToLinks,
     updateLink,
     updateTag,
-    getTagsById
+    getTagsById,
+    updateClickCount,
+    getClickCount
 }

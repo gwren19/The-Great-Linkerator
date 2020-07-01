@@ -1,0 +1,21 @@
+header {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    margin-top: 1rem;
+}
+
+.title {
+    color: black;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    padding-left: 1rem;
+}
+
+#create-link {
+    justify-self: end;
+    grid-column-start: 4;
+    max-height: 10rem;
+    max-width: 15rem;
+    margin-right: 1rem;
+}
