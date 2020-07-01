@@ -22,11 +22,10 @@ const Link = ({
         console.log(response)
     }).catch(error => {
         console.error(error)
-    });
-      
-  } catch (error) {
+    });    
+    } catch (error) {
       throw error;
-  }
+    }
   } 
 
   function handleClick() {
