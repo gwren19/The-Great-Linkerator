@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Header.css';
+// import './Header.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -31,8 +31,20 @@ const Header = () => {
     
     return (
         <>
-            <h1 className="title"> Welcome to the Linkerator!</h1>
-            <Button id='create-link' variant="info" onClick={handleShow}>Create New Link!</Button>
+            <section class="hero is-white">
+                <div class="container">
+                    <div class= "hero-body"> 
+                        <div class= "container">
+                            <h1 class="title  is-bold has-text-centered	"> Welcome to the Linkerator!</h1> 
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <button class="button is-info is-light is-large " variant="info" onClick={handleShow}>Create New Link!</button>
+            </section>
+
+            
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
